@@ -1,8 +1,29 @@
 services:
-  agent-zero:
-    container_name: agent-zero
+  agent_zero:
     image: agent0ai/agent-zero:latest
-    volumes:
-      - ./agent-zero:/a0
+    container_name: agent_zero_persistent
+    restart: unless-stopped
     ports:
-      - "50080:80"
+      - "55000:80"
+    volumes:
+      # Mount the entire Agent Zero directory for full access
+      - /home/morris/Agent\ Zero:/a0
+
+      # Mount Weapons repository for Agent Zero to work with
+      - /home/morris/Weapons-main:/a0/work_dir/Weapons
+
+      # Mount projects directory
+      - /home/morris/agent_zero_projects:/a0/work_dir/projects
+
+      # Mount home directory for persistence
+      - /var/lib/agent_zero:/root
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+    user: "root"
+    networks:
+      - run_default
+
+networks:
+  run_default:
+    external: true
