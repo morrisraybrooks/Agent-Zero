@@ -47,6 +47,7 @@ export GOOGLE_API_KEY="${GOOGLE_API_KEY:-AIzaSyDCHT2ZBP5O1uVrVcI0t2ARkcajA3n4wug
 export MISTRAL_API_KEY="${MISTRAL_API_KEY:-7RE8k4ZBDVEZ3BtozQrJmS4XJQCOIgH1}"
 export DEEPSEEK_API_KEY="${DEEPSEEK_API_KEY:-sk-0bc346e2ece24f50aebf4fbac808be58}"
 export HUGGINGFACE_API_KEY="${HUGGINGFACE_API_KEY:-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}"
+export VENICE_API_KEY="${VENICE_API_KEY:-juBGI6pViL3lftLiUW0xDo5KqRBEYuCx3vW9Y6EeF9}"
 
 # Copy local coder settings if not already the active settings
 SETTINGS_FILE="tmp/settings.json"
