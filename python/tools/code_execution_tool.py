@@ -67,15 +67,15 @@ class CodeExecution(Tool):
 
         if runtime == "python":
             response = await self.execute_python_code(
-                code=self.args["code"], session=session
+                code=self.args["code"], session=session, reset=True
             )
         elif runtime == "nodejs":
             response = await self.execute_nodejs_code(
-                code=self.args["code"], session=session
+                code=self.args["code"], session=session, reset=True
             )
         elif runtime == "terminal":
             response = await self.execute_terminal_command(
-                command=self.args["code"], session=session
+                command=self.args["code"], session=session, reset=True
             )
         elif runtime == "output":
             response = await self.get_terminal_output(

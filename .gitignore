@@ -14,6 +14,20 @@
 
 # Ignore all contents of the virtual environment directory
 .venv/
+venv/
+venv312/
+venv312_old_again/
+
+# Ignore API keys and sensitive information
+ai keys.md
+**/api_keys.md
+**/*_keys.md
+
+# Ignore project-specific directories
+Projects/
+
+# Ignore documentation that may contain sensitive info
+run ui command.md
 
 # Handle memory directory
 memory/**

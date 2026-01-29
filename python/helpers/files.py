@@ -424,7 +424,12 @@ def fix_dev_path(path: str):
 
 
 def normalize_a0_path(path: str):
-    "Convert absolute paths into /a0/... paths"
+    "Convert absolute paths into /a0/... paths (only when in docker)"
+    from python.helpers.runtime import is_dockerized # Import inside function to avoid circular dependency
+    if not is_dockerized():
+        # If not in a dockerized environment, do not prepend /a0/
+        return path
+    
     if is_in_base_dir(path):
         deabs = deabsolute_path(path)
         return "/a0/" + deabs

@@ -95,7 +95,16 @@ async def call_development_function(func: Callable[..., T], *args, **kwargs) -> 
 async def call_development_function(
     func: Union[Callable[..., T], Callable[..., Awaitable[T]]], *args, **kwargs
 ) -> T:
+    # Always call directly if not dockerized and in development
+    # This assumes that development functions are meant to be called locally
+    # unless there's a specific reason to use RFC (e.g., explicit remote debugging).
+    # For a bare metal setup, direct local call is preferred.
     if is_development():
+        if inspect.iscoroutinefunction(func):
+            return await func(*args, **kwargs)
+        else:
+            return func(*args, **kwargs)  # type: ignore
+    else: # Original logic for dockerized environment, or if we decide to use RFC in non-development.
         url = _get_rfc_url()
         password = _get_rfc_password()
         # Normalize path components to build a valid Python module path across OSes
@@ -112,11 +121,6 @@ async def call_development_function(
             kwargs=kwargs,
         )
         return cast(T, result)
-    else:
-        if inspect.iscoroutinefunction(func):
-            return await func(*args, **kwargs)
-        else:
-            return func(*args, **kwargs)  # type: ignore
 
 
 async def handle_rfc(rfc_call: rfc.RFCCall):
