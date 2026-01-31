@@ -69,7 +69,7 @@ pip install -r requirements.txt
 # Launch the Local Coder agent
 ./start_local_coder.sh
 
-# Then open http://localhost:50001 in your browser
+# Then open http://localhost:5000 in your browser
 ```
 
 ## 🔧 Configuration
