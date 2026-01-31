@@ -1,360 +1,123 @@
-<div align="center">
+# Morris's Coding Agent
 
-# `Agent Zero`
+A customized [Agent Zero](https://github.com/frdel/agent-zero) setup optimized for local software development with persistent memory and modern UI.
 
-<p align="center">
-    <a href="https://trendshift.io/repositories/11745" target="_blank"><img src="https://trendshift.io/api/badge/repositories/11745" alt="frdel%2Fagent-zero | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
-</p>
+## 🎯 What This Is
 
-[![Agent Zero Website](https://img.shields.io/badge/Website-agent--zero.ai-0A192F?style=for-the-badge&logo=vercel&logoColor=white)](https://agent-zero.ai) [![Thanks to Sponsors](https://img.shields.io/badge/GitHub%20Sponsors-Thanks%20to%20Sponsors-FF69B4?style=for-the-badge&logo=githubsponsors&logoColor=white)](https://github.com/sponsors/agent0ai) [![Follow on X](https://img.shields.io/badge/X-Follow-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/Agent0ai) [![Join our Discord](https://img.shields.io/badge/Discord-Join%20our%20server-5865F2?style=for-the-badge&logo=discord&logoColor=white)](https://discord.gg/B8KZKNsPpj) [![Subscribe on YouTube](https://img.shields.io/badge/YouTube-Subscribe-red?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/@AgentZeroFW) [![Connect on LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-blue?style=for-the-badge&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/jan-tomasek/) [![Follow on Warpcast](https://img.shields.io/badge/Warpcast-Follow-5A32F3?style=for-the-badge)](https://warpcast.com/agent-zero) 
+This is **not** a fork of Agent Zero - it's my personal coding assistant built on top of the Agent Zero framework. I've customized it specifically for:
 
+- **Local development** without Docker
+- **Persistent memory** across all coding sessions
+- **Enhanced agent profiles** for specialized tasks
+- **Modern glassmorphism UI** theme
+- **Mistral AI integration** as the primary LLM provider
 
-## Documentation:
+## 🚀 Key Customizations
 
-[Introduction](#a-personal-organic-agentic-framework-that-grows-and-learns-with-you) •
-[Installation](./docs/installation.md) •
-[Development](./docs/development.md) •
-[Extensibility](./docs/extensibility.md) •
-[Connectivity](./docs/connectivity.md) •
-[How to update](./docs/installation.md#how-to-update-agent-zero) •
-[Documentation](./docs/README.md) •
-[Usage](./docs/usage.md)
+### 1. **Enhanced Local Coder Agent**
+- Full-stack development specialist with persistent memory
+- Remembers your entire codebase structure across sessions
+- Specialized in React, Node.js, Python, and modern frameworks
+- See: [`agents/local_coder/README.md`](agents/local_coder/README.md)
 
-Or see DeepWiki generated documentation:
+### 2. **Enhanced Hacker Agent**
+- Offensive security specialist for penetration testing
+- Maintains engagement history and findings across sessions
+- Ethical hacking with proper authorization workflows
+- See: [`agents/hacker/README.md`](agents/hacker/README.md)
 
-[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/agent0ai/agent-zero)
+### 3. **Modern UI Theme**
+- Sleek glassmorphism design with gradient backgrounds
+- Smooth animations and contemporary styling
+- Dark mode optimized for long coding sessions
+- See: [`webui/css/modern-theme.css`](webui/css/modern-theme.css)
 
-</div>
+### 4. **Simplified Startup Scripts**
+- `start_local_coder.sh` - Launch the coding assistant
+- `start_hacker.sh` - Launch the security testing agent
+- `start_agent_zero.sh` - Launch default Agent Zero
+- All scripts handle virtual environment activation automatically
 
+## 📦 Installation
 
-<div align="center">
+### Prerequisites
+- Python 3.12+ (tested with 3.12.8)
+- Virtual environment support
+- API keys for Mistral AI (or other LLM providers)
 
-> ### 🚨 **PROJECTS!** 🚨
-Agent Zero now supports **Projects** – isolated workspaces with their own prompts, files, memory, and secrets, so you can create dedicated setups for each use case without mixing contexts.
-</div>
-
-
-
-[![Showcase](/docs/res/showcase-thumb.png)](https://youtu.be/MdzLhWWoxEs)
-
-
-
-## A personal, organic agentic framework that grows and learns with you
-
-
-
-- Agent Zero is not a predefined agentic framework. It is designed to be dynamic, organically growing, and learning as you use it.
-- Agent Zero is fully transparent, readable, comprehensible, customizable, and interactive.
-- Agent Zero uses the computer as a tool to accomplish its (your) tasks.
-
-# 💡 Key Features
-
-1. **General-purpose Assistant**
-
-- Agent Zero is not pre-programmed for specific tasks (but can be). It is meant to be a general-purpose personal assistant. Give it a task, and it will gather information, execute commands and code, cooperate with other agent instances, and do its best to accomplish it.
-- It has a persistent memory, allowing it to memorize previous solutions, code, facts, instructions, etc., to solve tasks faster and more reliably in the future.
-
-![Agent 0 Working](/docs/res/ui-screen-2.png)
-
-2. **Computer as a Tool**
-
-- Agent Zero uses the operating system as a tool to accomplish its tasks. It has no single-purpose tools pre-programmed. Instead, it can write its own code and use the terminal to create and use its own tools as needed.
-- The only default tools in its arsenal are online search, memory features, communication (with the user and other agents), and code/terminal execution. Everything else is created by the agent itself or can be extended by the user.
-- Tool usage functionality has been developed from scratch to be the most compatible and reliable, even with very small models.
-- **Default Tools:** Agent Zero includes tools like knowledge, code execution, and communication.
-- **Creating Custom Tools:** Extend Agent Zero's functionality by creating your own custom tools.
-- **Instruments:** Instruments are a new type of tool that allow you to create custom functions and procedures that can be called by Agent Zero.
-
-3. **Multi-agent Cooperation**
-
-- Every agent has a superior agent giving it tasks and instructions. Every agent then reports back to its superior.
-- In the case of the first agent in the chain (Agent 0), the superior is the human user; the agent sees no difference.
-- Every agent can create its subordinate agent to help break down and solve subtasks. This helps all agents keep their context clean and focused.
-
-![Multi-agent](docs/res/physics.png)
-![Multi-agent 2](docs/res/physics-2.png)
-
-4. **Completely Customizable and Extensible**
-
-- Almost nothing in this framework is hard-coded. Nothing is hidden. Everything can be extended or changed by the user.
-- The whole behavior is defined by a system prompt in the **prompts/default/agent.system.md** file. Change this prompt and change the framework dramatically.
-- The framework does not guide or limit the agent in any way. There are no hard-coded rails that agents have to follow.
-- Every prompt, every small message template sent to the agent in its communication loop can be found in the **prompts/** folder and changed.
-- Every default tool can be found in the **python/tools/** folder and changed or copied to create new predefined tools.
-
-![Prompts](/docs/res/prompts.png)
-
-5. **Communication is Key**
-
-- Give your agent a proper system prompt and instructions, and it can do miracles.
-- Agents can communicate with their superiors and subordinates, asking questions, giving instructions, and providing guidance. Instruct your agents in the system prompt on how to communicate effectively.
-- The terminal interface is real-time streamed and interactive. You can stop and intervene at any point. If you see your agent heading in the wrong direction, just stop and tell it right away.
-- There is a lot of freedom in this framework. You can instruct your agents to regularly report back to superiors asking for permission to continue. You can instruct them to use point-scoring systems when deciding when to delegate subtasks. Superiors can double-check subordinates' results and dispute. The possibilities are endless.
-
-## 🚀 Things you can build with Agent Zero
-
-- **Development Projects** - `"Create a React dashboard with real-time data visualization"`
-
-- **Data Analysis** - `"Analyze last quarter's NVIDIA sales data and create trend reports"`
-
-- **Content Creation** - `"Write a technical blog post about microservices"`
-
-- **System Admin** - `"Set up a monitoring system for our web servers"`
-
-- **Research** - `"Gather and summarize five recent AI papers about CoT prompting"`
-
-
-
-# ⚙️ Installation
-
-Click to open a video to learn how to install Agent Zero:
-
-[![Easy Installation guide](/docs/res/easy_ins_vid.png)](https://www.youtube.com/watch?v=w5v5Kjx51hs)
-
-A detailed setup guide for Windows, macOS, and Linux with a video can be found in the Agent Zero Documentation at [this page](./docs/installation.md).
-
-### ⚡ Quick Start
+### Setup
 
 ```bash
-# Pull and run with Docker
+# Clone this repository
+git clone https://github.com/morrisraybrooks/Agent-Zero.git
+cd Agent-Zero
 
-docker pull agent0ai/agent-zero
-docker run -p 50001:80 agent0ai/agent-zero
+# Create virtual environment
+python3 -m venv venv312
+source venv312/bin/activate
 
-# Visit http://localhost:50001 to start
+# Install dependencies
+pip install -r requirements.txt
+
+# Configure your API keys
+# Edit tmp/settings_local_coder.json with your API keys
 ```
 
-## 🐳 Fully Dockerized, with Speech-to-Text and TTS
+### Quick Start
 
-![Settings](docs/res/settings-page-ui.png)
+```bash
+# Launch the Local Coder agent
+./start_local_coder.sh
 
-- Customizable settings allow users to tailor the agent's behavior and responses to their needs.
-- The Web UI output is very clean, fluid, colorful, readable, and interactive; nothing is hidden.
-- You can load or save chats directly within the Web UI.
-- The same output you see in the terminal is automatically saved to an HTML file in **logs/** folder for every session.
+# Then open http://localhost:50001 in your browser
+```
 
-![Time example](/docs/res/time_example.jpg)
+## 🔧 Configuration
 
-- Agent output is streamed in real-time, allowing users to read along and intervene at any time.
-- No coding is required; only prompting and communication skills are necessary.
-- With a solid system prompt, the framework is reliable even with small models, including precise tool usage.
+The main configuration is in `tmp/settings_local_coder.json`:
 
-## 👀 Keep in Mind
+- **Chat Model**: Mistral Large (mistral-large-latest)
+- **Utility Model**: Mistral Large
+- **Browser Model**: Mistral Large
+- **Embedding Model**: HuggingFace sentence-transformers/all-MiniLM-L6-v2
+- **Rate Limits**: 5 req/min, 50k tokens/min (configurable)
 
-1. **Agent Zero Can Be Dangerous!**
+See [`SETUP_LOCAL_CODER.md`](SETUP_LOCAL_CODER.md) for detailed configuration options.
 
-- With proper instruction, Agent Zero is capable of many things, even potentially dangerous actions concerning your computer, data, or accounts. Always run Agent Zero in an isolated environment (like Docker) and be careful what you wish for.
+## 📚 Documentation
 
-2. **Agent Zero Is Prompt-based.**
+- **[Local Coder Agent Guide](agents/local_coder/README.md)** - Full-stack development assistant
+- **[Hacker Agent Guide](agents/hacker/README.md)** - Security testing specialist
+- **[Setup Guide](SETUP_LOCAL_CODER.md)** - Detailed installation and configuration
+- **[API Key Setup](API_KEY_SETUP.md)** - How to configure API keys
 
-- The whole framework is guided by the **prompts/** folder. Agent guidelines, tool instructions, messages, utility AI functions, it's all there.
+## 🎨 What Makes This Different
 
+Unlike the base Agent Zero framework, this setup is:
 
-## 📚 Read the Documentation
+1. **Optimized for local execution** - No Docker complexity
+2. **Memory-persistent** - Agents remember your projects across sessions
+3. **Visually modern** - Custom UI theme for better UX
+4. **Pre-configured** - Ready to use for coding tasks out of the box
+5. **Specialized agents** - Enhanced profiles for specific use cases
 
-| Page | Description |
-|-------|-------------|
-| [Installation](./docs/installation.md) | Installation, setup and configuration |
-| [Usage](./docs/usage.md) | Basic and advanced usage |
-| [Development](./docs/development.md) | Development and customization |
-| [Extensibility](./docs/extensibility.md) | Extending Agent Zero |
-| [Connectivity](./docs/connectivity.md) | External API endpoints, MCP server connections, A2A protocol |
-| [Architecture](./docs/architecture.md) | System design and components |
-| [Contributing](./docs/contribution.md) | How to contribute |
-| [Troubleshooting](./docs/troubleshooting.md) | Common issues and their solutions |
+## 🔗 Credits
 
+Built on top of [Agent Zero](https://github.com/frdel/agent-zero) by [@frdel](https://github.com/frdel)
 
-## 🎯 Changelog
+Agent Zero is an organic, evolving AI agent framework. This repository contains my personal customizations for software development workflows.
 
-### v0.9.7 - Projects
-[Release video](https://youtu.be/RrTDp_v9V1c)
-- Projects management
-    - Support for custom instructions
-    - Integration with memory, knowledge, files
-    - Project specific secrets 
-- New Welcome screen/Dashboard
-- New Wait tool
-- Subordinate agent configuration override support
-- Support for multiple documents at once in document_query_tool
-- Improved context on interventions
-- Openrouter embedding support
-- Frontend components refactor and polishing
-- SSH metadata output fix
-- Support for windows powershell in local TTY utility
-- More efficient selective streaming for LLMs
-- UI output length limit improvements
+## 📝 License
 
+Same as Agent Zero - see [LICENSE](LICENSE)
 
+## 🤝 Contributing
 
-### v0.9.6 - Memory Dashboard
-[Release video](https://youtu.be/sizjAq2-d9s)
-- Memory Management Dashboard
-- Kali update
-- Python update + dual installation
-- Browser Use update
-- New login screen
-- LiteLLM retry on temporary errors
-- Github Copilot provider support
+This is a personal setup, but feel free to:
+- Fork it for your own customizations
+- Open issues if you find bugs in my customizations
+- Share your own Agent Zero setups!
 
+---
 
-### v0.9.5 - Secrets
-[Release video](https://www.youtube.com/watch?v=VqxUdt7pjd8)
-- Secrets management - agent can use credentials without seeing them
-- Agent can copy paste messages and files without rewriting them
-- LiteLLM global configuration field
-- Custom HTTP headers field for browser agent
-- Progressive web app support
-- Extra model params support for JSON
-- Short IDs for files and memories to prevent LLM errors
-- Tunnel component frontend rework
-- Fix for timezone change bug
-- Notifications z-index fix
-
-### v0.9.4 - Connectivity, UI
-[Release video](https://www.youtube.com/watch?v=C2BAdDOduIc)
-- External API endpoints
-- Streamable HTTP MCP A0 server
-- A2A (Agent to Agent) protocol - server+client
-- New notifications system
-- New local terminal interface for stability
-- Rate limiter integration to models
-- Delayed memory recall
-- Smarter autoscrolling in UI
-- Action buttons in messages
-- Multiple API keys support
-- Download streaming
-- Tunnel URL QR code
-- Internal fixes and optimizations
-
-### v0.9.3 - Subordinates, memory, providers Latest
-[Release video](https://www.youtube.com/watch?v=-LfejFWL34k)
-- Faster startup/restart
-- Subordinate agents can have dedicated prompts, tools and system extensions
-- Streamable HTTP MCP server support
-- Memory loading enhanced by AI filter
-- Memory AI consolidation when saving memories
-- Auto memory system configuration in settings
-- LLM providers available are set by providers.yaml configuration file
-- Venice.ai LLM provider supported
-- Initial agent message for user + as example for LLM
-- Docker build support for local images
-- File browser fix
-
-
-### v0.9.2 - Kokoro TTS, Attachments
-[Release video](https://www.youtube.com/watch?v=sPot_CAX62I)
-
-- Kokoro text-to-speech integration
-- New message attachments system
-- Minor updates: log truncation, hyperlink targets, component examples, api cleanup
-
-
-### v0.9.1 - LiteLLM, UI improvements
-[Release video](https://youtu.be/crwr0M4Spcg)
-- Langchain replaced with LiteLLM
-    - Support for reasoning models streaming
-    - Support for more providers
-    - Openrouter set as default instead of OpenAI
-- UI improvements
-    - New message grouping system
-    - Communication smoother and more efficient
-    - Collapsible messages by type
-    - Code execution tool output improved
-    - Tables and code blocks scrollable
-    - More space efficient on mobile
-- Streamable HTTP MCP servers support
-- LLM API URL added to models config for Azure, local and custom providers
-    
-
-### v0.9.0 - Agent roles, backup/restore
-[Release video](https://www.youtube.com/watch?v=rMIe-TC6H-k)
-- subordinate agents can use prompt profiles for different roles
-- backup/restore functionality for easier upgrades
-- security and bug fixes
-
-### v0.8.7 - Formatting, Document RAG Latest
-[Release video](https://youtu.be/OQJkfofYbus)
-- markdown rendering in responses
-- live response rendering
-- document Q&A tool
-
-### v0.8.6 - Merge and update
-[Release video](https://youtu.be/l0qpK3Wt65A)
-- Merge with Hacking Edition
-- browser-use upgrade and integration re-work
-- tunnel provider switch
-
-### v0.8.5 - **MCP Server + Client**
-[Release video](https://youtu.be/pM5f4Vz3_IQ)
-
-- Agent Zero can now act as MCP Server
-- Agent Zero can use external MCP servers as tools
-
-### v0.8.4.1 - 2
-Default models set to gpt-4.1
-- Code execution tool improvements
-- Browser agent improvements
-- Memory improvements
-- Various bugfixes related to context management
-- Message formatting improvements
-- Scheduler improvements
-- New model provider
-- Input tool fix
-- Compatibility and stability improvements
-
-### v0.8.4
-[Release video](https://youtu.be/QBh_h_D_E24)
-
-- **Remote access (mobile)**
-
-### v0.8.3.1
-[Release video](https://youtu.be/AGNpQ3_GxFQ)
-
-- **Automatic embedding**
-
-
-### v0.8.3
-[Release video](https://youtu.be/bPIZo0poalY)
-
-- ***Planning and scheduling***
-
-### v0.8.2
-[Release video](https://youtu.be/xMUNynQ9x6Y)
-
-- **Multitasking in terminal**
-- **Chat names**
-
-### v0.8.1
-[Release video](https://youtu.be/quv145buW74)
-
-- **Browser Agent**
-- **UX Improvements**
-
-### v0.8
-[Release video](https://youtu.be/cHDCCSr1YRI)
-
-- **Docker Runtime**
-- **New Messages History and Summarization System**
-- **Agent Behavior Change and Management**
-- **Text-to-Speech (TTS) and Speech-to-Text (STT)**
-- **Settings Page in Web UI**
-- **SearXNG Integration Replacing Perplexity + DuckDuckGo**
-- **File Browser Functionality**
-- **KaTeX Math Visualization Support**
-- **In-chat File Attachments**
-
-### v0.7
-[Release video](https://youtu.be/U_Gl0NPalKA)
-
-- **Automatic Memory**
-- **UI Improvements**
-- **Instruments**
-- **Extensions Framework**
-- **Reflection Prompts**
-- **Bug Fixes**
-
-## 🤝 Community and Support
-
-- [Join our Discord](https://discord.gg/B8KZKNsPpj) for live discussions or [visit our Skool Community](https://www.skool.com/agent-zero).
-- [Follow our YouTube channel](https://www.youtube.com/@AgentZeroFW) for hands-on explanations and tutorials
-- [Report Issues](https://github.com/agent0ai/agent-zero/issues) for bug fixes and features
+**Note**: This is a personal coding assistant setup, not a general-purpose Agent Zero distribution. For the official Agent Zero framework, visit [agent-zero.ai](https://agent-zero.ai) or the [official repository](https://github.com/frdel/agent-zero).
