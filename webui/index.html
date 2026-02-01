@@ -18,6 +18,8 @@
     <link rel="stylesheet" href="css/buttons.css">
     <!-- Modern Theme CSS -->
     <link rel="stylesheet" href="css/modern-theme.css">
+    <!-- VS Code Interactive Theme -->
+    <link rel="stylesheet" href="css/vscode-interactive-theme.css">
 
     <!-- Flatpickr for datetime picker -->
     <link rel="stylesheet" href="vendor/flatpickr/flatpickr.min.css">
@@ -136,30 +138,104 @@
     </script>
 </head>
 
-<body class="dark-mode device-pointer modern-theme" x-data>
-    <div class="container">
+<body class="dark-mode device-pointer modern-theme vscode-theme" x-data="{
+    leftWidth: 300,
+    middleWidth: 50,
+    rightWidth: 50,
+    fileContentHeight: 60,
+    isResizingLeft: false,
+    isResizingMiddle: false,
+    isResizingVertical: false
+}"
+x-effect="
+    if(isResizingLeft || isResizingMiddle) {
+        document.body.classList.add('resizing');
+    } else {
+        document.body.classList.remove('resizing');
+    }
+    if(isResizingVertical) {
+        document.body.classList.add('resizing-vertical');
+    } else {
+        document.body.classList.remove('resizing-vertical');
+    }
+">
+    <!-- Persistent Sidebar Toggle Button -->
+    <button class="vscode-sidebar-toggle"
+            onclick="if(window.Alpine && Alpine.store('sidebar')) { Alpine.store('sidebar').toggle(); }"
+            onmouseover="this.style.backgroundColor='#2a2d2e'; this.style.borderColor='#007acc'; this.querySelector('svg').style.stroke='#007acc';"
+            onmouseout="this.style.backgroundColor='#252526'; this.style.borderColor='#3e3e42'; this.querySelector('svg').style.stroke='#cccccc';"
+            title="Toggle Sidebar"
+            aria-label="Toggle Sidebar"
+            style="position: fixed !important; top: 12px !important; left: 12px !important; z-index: 9999 !important; width: 36px !important; height: 36px !important; background-color: #252526 !important; border: 1px solid #3e3e42 !important; border-radius: 4px !important; display: flex !important; align-items: center !important; justify-content: center !important; opacity: 1 !important; visibility: visible !important; cursor: pointer !important; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3) !important; transition: all 0.2s ease !important; padding: 0 !important;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#cccccc" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display: block !important; transition: stroke 0.2s ease !important;">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+    </button>
+
+    <div class="vscode-layout">
         <!-- Sidebar Overlay -->
         <div id="sidebar-overlay" x-data>
             <template x-if="$store.sidebar">
                 <div class="sidebar-overlay" :class="{'visible': $store.sidebar.isOpen && $store.sidebar.isMobile()}" @click="$store.sidebar.close()"></div>
             </template>
         </div>
-        </template>
-        <!-- Left Sidebar (Header Icons, Quick Actions, Tabs, Chats, Tasks) -->
-        <x-component path="sidebar/left-sidebar.html"></x-component>
 
-        <!-- Right Panel (Message History and Input Section) -->
-        <div id="right-panel" class="panel" >
+        <!-- (1) Left Sidebar - Collapsible -->
+        <div class="vscode-left-sidebar"
+             x-data
+             x-show="$store.sidebar && $store.sidebar.isOpen"
+             x-transition:enter="transition ease-out duration-300"
+             x-transition:enter-start="opacity-0 transform -translate-x-full"
+             x-transition:enter-end="opacity-100 transform translate-x-0"
+             x-transition:leave="transition ease-in duration-300"
+             x-transition:leave-start="opacity-100 transform translate-x-0"
+             x-transition:leave-end="opacity-0 transform -translate-x-full"
+             :style="`width: ${leftWidth}px`">
+            <x-component path="sidebar/left-sidebar.html"></x-component>
+        </div>
 
+        <!-- Resize Handle for Left Sidebar -->
+        <div class="vscode-resize-handle vscode-resize-handle-vertical"
+            x-data
+            x-show="$store.sidebar && $store.sidebar.isOpen"
+            @mousedown="isResizingLeft = true"
+            @mouseup.window="isResizingLeft = false"
+            @mousemove.window="if(isResizingLeft) { leftWidth = Math.max(200, Math.min(600, $event.clientX)); }">
+        </div>
+
+        <!-- (2-5) Middle Column - Messages, Files, Input, Buttons -->
+        <div class="vscode-middle-column"
+             x-data
+             :style="`flex: ${$store.sidebar && !$store.sidebar.isOpen ? middleWidth + 15 : middleWidth}`">
             <!-- top section with time, status etc. -->
             <x-component path="chat/top-section/chat-top.html"></x-component>
 
-            <!-- Welcome Screen Component -->
+            <!-- (2) Welcome Screen Component -->
             <div x-data x-show="$store.welcomeStore && $store.welcomeStore.isVisible">
                 <x-component path="welcome/welcome-screen.html"></x-component>
             </div>
-            <!-- Message History (actual messages) -->
-            <div id="chat-history" x-data x-show="!$store.welcomeStore || !$store.welcomeStore.isVisible"></div>
+
+            <!-- (2) Message History (actual messages) -->
+            <div id="chat-history" class="vscode-message-history" x-data x-show="!$store.welcomeStore || !$store.welcomeStore.isVisible"></div>
+
+            <!-- (3) Indexed File Reference Area -->
+            <div class="vscode-indexed-files" x-data="{ files: ['main.py', 'config.json', 'utils.js'] }">
+                <div class="vscode-indexed-files-header">
+                    <span class="vscode-indexed-files-title">📁 Working Files</span>
+                    <button class="vscode-indexed-files-clear">Clear</button>
+                </div>
+                <div class="vscode-indexed-files-list">
+                    <template x-for="file in files" :key="file">
+                        <div class="vscode-indexed-file-item">
+                            <span class="vscode-file-icon">📄</span>
+                            <span class="vscode-file-name" x-text="file"></span>
+                            <button class="vscode-file-remove">×</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
 
             <!-- NEW: Toast Stack Component -->
             <div style="position: relative; height: 0;">
@@ -175,12 +251,170 @@
                 <button class="toast__copy" style="display: none;">Copy</button>
                 <button class="toast__close">Close</button>
             </div>
-            <!-- Chat Input Area -->
-            <div x-show="!$store.welcomeStore || !$store.welcomeStore.isVisible">
+
+            <!-- (4) Chat Input Area -->
+            <div class="vscode-chat-input-section" x-show="!$store.welcomeStore || !$store.welcomeStore.isVisible">
                 <!-- Progress Bar -->
                 <x-component path="chat/input/progress.html"></x-component>
-                <!-- Input Section -->
+                <!-- Input Section (includes bottom-actions.html component with action buttons) -->
                 <x-component path="chat/input/chat-bar.html"></x-component>
+            </div>
+        </div>
+
+        <!-- Resize Handle for Middle Column -->
+        <div class="vscode-resize-handle vscode-resize-handle-vertical"
+            @mousedown="isResizingMiddle = true"
+            @mouseup.window="isResizingMiddle = false"
+            @mousemove.window="if(isResizingMiddle) {
+                const containerWidth = $el.parentElement.offsetWidth - leftWidth - 8;
+                const mouseX = $event.clientX - leftWidth - 4;
+                const percentage = (mouseX / containerWidth) * 100;
+                middleWidth = Math.max(20, Math.min(80, percentage));
+                rightWidth = 100 - middleWidth;
+            }">
+        </div>
+
+        <!-- (6-7) Right Column - File Content + Terminal -->
+        <div class="vscode-right-column" :style="`flex: ${rightWidth}`">
+            <!-- (6) Open File Content Area -->
+            <div class="vscode-file-content" x-data :style="`height: ${fileContentHeight}%`">
+                <div class="vscode-file-content-header">
+                    <div class="vscode-file-tabs">
+                        <!-- Dynamic file tabs from store -->
+                        <template x-if="$store.fileTabs">
+                            <template x-for="tab in $store.fileTabs.openTabs" :key="tab.id">
+                                <div class="vscode-file-tab"
+                                     :class="{ 'active': $store.fileTabs.isTabActive(tab.id) }"
+                                     @click="$store.fileTabs.setActiveTab(tab.id)">
+                                    <span class="vscode-file-tab-icon" x-text="tab.icon"></span>
+                                    <span class="vscode-file-tab-name" x-text="tab.name"></span>
+                                    <button class="vscode-file-tab-close"
+                                            @click.stop="$store.fileTabs.closeTab(tab.id)"
+                                            title="Close">×</button>
+                                </div>
+                            </template>
+                        </template>
+                    </div>
+                </div>
+                <div class="vscode-file-content-body">
+                    <!-- Dynamic file content based on active tab -->
+                    <template x-if="$store.fileTabs && $store.fileTabs.activeTab">
+                        <pre><code :class="`language-${$store.fileTabs.activeTab.language}`" x-text="$store.fileTabs.activeTab.content"></code></pre>
+                    </template>
+                    <!-- Empty state when no tabs are open -->
+                    <template x-if="$store.fileTabs && $store.fileTabs.openTabs.length === 0">
+                        <div class="vscode-empty-state">
+                            <p style="color: var(--vscode-text-secondary); text-align: center; padding: 40px;">
+                                No files open
+                            </p>
+                        </div>
+                    </template>
+                </div>
+            </div>
+
+            <!-- Resize Handle for Vertical Split -->
+            <div class="vscode-resize-handle vscode-resize-handle-horizontal"
+                @mousedown="isResizingVertical = true"
+                @mouseup.window="isResizingVertical = false"
+                @mousemove.window="if(isResizingVertical) {
+                    const containerHeight = $el.parentElement.offsetHeight;
+                    const percentage = ($event.clientY - $el.parentElement.getBoundingClientRect().top) / containerHeight * 100;
+                    fileContentHeight = Math.max(30, Math.min(70, percentage));
+                }">
+            </div>
+
+            <!-- (7) Terminal Area -->
+            <div class="vscode-terminal-area" :style="`height: ${100 - fileContentHeight}%`" x-data="{
+                activeTab: 'terminal',
+                minimized: false,
+                height: 300,
+                tabs: ['problems', 'output', 'debug', 'terminal', 'agent']
+            }">
+                <!-- Panel Header with Tabs -->
+                <div class="vscode-panel-header">
+                    <div class="vscode-panel-tabs">
+                        <button class="vscode-panel-tab" :class="{ 'active': activeTab === 'problems' }" @click="activeTab = 'problems'; minimized = false">
+                            PROBLEMS
+                        </button>
+                        <button class="vscode-panel-tab" :class="{ 'active': activeTab === 'output' }" @click="activeTab = 'output'; minimized = false">
+                            OUTPUT
+                        </button>
+                        <button class="vscode-panel-tab" :class="{ 'active': activeTab === 'debug' }" @click="activeTab = 'debug'; minimized = false">
+                            DEBUG CONSOLE
+                        </button>
+                        <button class="vscode-panel-tab" :class="{ 'active': activeTab === 'terminal' }" @click="activeTab = 'terminal'; minimized = false">
+                            TERMINAL
+                        </button>
+                        <button class="vscode-panel-tab" :class="{ 'active': activeTab === 'agent' }" @click="activeTab = 'agent'; minimized = false">
+                            <span class="vscode-chat-icon">🤖</span> AUGMENT NEXT EDIT
+                        </button>
+                    </div>
+                    <div class="vscode-panel-actions">
+                        <button class="vscode-panel-action-btn" @click="minimized = !minimized" :title="minimized ? 'Maximize Panel' : 'Minimize Panel'">
+                            <span x-text="minimized ? '▲' : '▼'"></span>
+                        </button>
+                        <button class="vscode-panel-action-btn" title="Close Panel">×</button>
+                    </div>
+                </div>
+
+                <!-- Panel Content -->
+                <div class="vscode-panel-content vscode-scrollbar" x-show="!minimized" :style="'height: ' + height + 'px'">
+                    <!-- PROBLEMS Tab -->
+                    <div x-show="activeTab === 'problems'" class="vscode-panel-view">
+                        <div class="vscode-empty-state">
+                            <p>No problems detected</p>
+                        </div>
+                    </div>
+
+                    <!-- OUTPUT Tab -->
+                    <div x-show="activeTab === 'output'" class="vscode-panel-view">
+                        <div class="vscode-terminal-output">
+                            <div class="vscode-output-line">Agent Zero initialized successfully</div>
+                            <div class="vscode-output-line">Listening on http://localhost:5000</div>
+                        </div>
+                    </div>
+
+                    <!-- DEBUG CONSOLE Tab -->
+                    <div x-show="activeTab === 'debug'" class="vscode-panel-view">
+                        <div class="vscode-empty-state">
+                            <p>Debug console ready</p>
+                        </div>
+                    </div>
+
+                    <!-- TERMINAL Tab -->
+                    <div x-show="activeTab === 'terminal'" class="vscode-panel-view vscode-terminal">
+                        <div class="vscode-terminal-output">
+                            <div class="vscode-terminal-line">
+                                <span class="vscode-terminal-prompt">(venv) morris@morris-00N01D-H3:~/Agent Zero$</span>
+                                <span class="vscode-terminal-cursor">█</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- AGENT CHAT Tab -->
+                    <div x-show="activeTab === 'agent'" class="vscode-panel-view vscode-agent-chat">
+                        <div class="vscode-chat-messages vscode-scrollbar">
+                            <div class="vscode-message vscode-fade-in">
+                                <div class="vscode-message-header">
+                                    <div class="vscode-message-author">
+                                        <div class="vscode-message-avatar">MCA</div>
+                                        <span>Morris's Coding Agent</span>
+                                    </div>
+                                    <span class="vscode-message-time">Just now</span>
+                                </div>
+                                <div class="vscode-message-content">
+                                    Welcome to Morris's Coding Agent! I'm ready to help you with your coding tasks.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="vscode-chat-input-area">
+                            <div class="vscode-chat-input-wrapper">
+                                <textarea class="vscode-chat-input" placeholder="Ask Agent Zero anything..." rows="1"></textarea>
+                                <button class="vscode-send-btn">Send</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
